@@ -1,0 +1,24 @@
+{
+  "name": "connect4",
+  "version": "1.0.0",
+  "description": "Text Console-based Connect Four game",
+  "main": "index.js",
+  "scripts": {
+    "compile": "grunt",
+    "start": "node ./build/Connect4.js"
+  },
+  "repository": "git@github.com:frendable/connect4.git",
+  "author": "Frendy Priandi",
+  "license": "MIT",
+  "dependencies": {
+    "ansi": "^0.3.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "grunt": "^1.0.3",
+    "grunt-babel": "^7.0.0",
+    "grunt-contrib-watch": "^1.1.0"
+  }
+}
