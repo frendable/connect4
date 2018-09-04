@@ -20,54 +20,43 @@ var Context = function () {
     this._state = {
       pageState: null,
       turnState: null,
-      menuState: null,
-      winState: false
+      gameState: null
     };
   }
 
   _createClass(Context, [{
-    key: "SetPageState",
-    value: function SetPageState(pageState) {
+    key: "setPageState",
+    value: function setPageState(pageState) {
       this._state.pageState = pageState;
     }
   }, {
-    key: "GetPageState",
-    value: function GetPageState() {
+    key: "getPageState",
+    value: function getPageState() {
       return this._state.pageState;
     }
   }, {
-    key: "SetTurnState",
-    value: function SetTurnState(turnState) {
+    key: "setTurnState",
+    value: function setTurnState(turnState) {
       this._state.turnState = turnState;
     }
   }, {
-    key: "GetTurnState",
-    value: function GetTurnState() {
+    key: "getTurnState",
+    value: function getTurnState() {
       return this._state.turnState;
     }
   }, {
-    key: "SetWinState",
-    value: function SetWinState(winState) {
-      this._state.winState = winState;
+    key: "setGameState",
+    value: function setGameState(gameState) {
+      this._state.gameState = gameState;
     }
   }, {
-    key: "GetWinState",
-    value: function GetWinState() {
-      return this._state.winState;
+    key: "getGameState",
+    value: function getGameState() {
+      return this._state.gameState;
     }
   }, {
-    key: "SetMenuState",
-    value: function SetMenuState(menuState) {
-      this._state.menuState = menuState;
-    }
-  }, {
-    key: "GetMenuState",
-    value: function GetMenuState() {
-      return this._state.menuState;
-    }
-  }, {
-    key: "GetAllState",
-    value: function GetAllState() {
+    key: "getAllState",
+    value: function getAllState() {
       return this._state;
     }
   }]);

@@ -1,4 +1,5 @@
 export const COLOR = {
+  WHITE: 'WHITE', //Blank space
   RED: 'RED',
   BLUE: 'BLUE'
 };

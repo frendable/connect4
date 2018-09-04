@@ -1,7 +1,7 @@
 class State {
   constructor() {}
 
-  DoAction(context) {}
+  doAction(context) {}
 }
 
 export default State;

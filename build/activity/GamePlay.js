@@ -32,8 +32,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var FRAME = 100;
-
 var GamePlay = function () {
   function GamePlay() {
     _classCallCheck(this, GamePlay);
@@ -48,7 +46,7 @@ var GamePlay = function () {
      * Open main menu page for the first time
      */
     var mainMenuPageState = new _MainMenuPageState2.default();
-    mainMenuPageState.DoAction(this._context);
+    mainMenuPageState.doAction(this._context);
   }
 
   _createClass(GamePlay, [{
@@ -56,34 +54,26 @@ var GamePlay = function () {
     value: function activityManager() {
       var _this = this;
 
-      if (this._context.GetPageState().GetPage() === _GameConstant.PAGE.MAIN_MENU) {
+      if (this._context.getPageState().getPage() === _GameConstant.PAGE.MAIN_MENU) {
         this._activeController = this._mainMenuController;
-        this._activeController.Render(function () {
-          _this.loop();
+        this._activeController.start(function () {
+          _this.activityManager();
         });
       } else {
         if (this._inGameController === null) {
           this._inGameController = new _InGame2.default(this._context, this._ui);
         }
         this._activeController = this._inGameController;
-        this._activeController.Render();
-        this.loop();
+        this._activeController.start(function () {
+          _this.activityManager();
+        });
       }
-    }
-  }, {
-    key: 'loop',
-    value: function loop() {
-      var _this2 = this;
-
-      setTimeout(function () {
-        _this2.activityManager();
-      }, FRAME);
     }
   }, {
     key: 'start',
     value: function start() {
       console.log('Game started!');
-      this.loop();
+      this.activityManager();
     }
   }]);
 

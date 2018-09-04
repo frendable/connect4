@@ -10,26 +10,39 @@ var _MainMenu = require('../view/MainMenu');
 
 var _MainMenu2 = _interopRequireDefault(_MainMenu);
 
+var _Controller2 = require('./Controller');
+
+var _Controller3 = _interopRequireDefault(_Controller2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var MainMenu = function () {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var MainMenu = function (_Controller) {
+  _inherits(MainMenu, _Controller);
+
   function MainMenu(context, ui) {
     _classCallCheck(this, MainMenu);
 
     //Init view
-    this._mainMenuView = new _MainMenu2.default(context, ui);
+    var _this = _possibleConstructorReturn(this, (MainMenu.__proto__ || Object.getPrototypeOf(MainMenu)).call(this, context, ui));
+
+    _this._mainMenuView = new _MainMenu2.default(context, ui);
+    return _this;
   }
 
   _createClass(MainMenu, [{
-    key: 'Render',
-    value: function Render(callback) {
-      this._mainMenuView.RenderQuestion(callback);
+    key: 'start',
+    value: function start(callback) {
+      this._mainMenuView.renderQuestion(callback);
     }
   }]);
 
   return MainMenu;
-}();
+}(_Controller3.default);
 
 exports.default = MainMenu;

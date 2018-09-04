@@ -8,9 +8,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _GameConstant = require('../resource/GameConstant');
 
-var _MenuState = require('../model/State/MenuState');
+var _GameState = require('../model/State/GameState');
 
-var _MenuState2 = _interopRequireDefault(_MenuState);
+var _GameState2 = _interopRequireDefault(_GameState);
 
 var _InGamePageState = require('../model/State/InGamePageState');
 
@@ -27,35 +27,38 @@ var MainMenu = function () {
     this._context = context;
     this._ui = ui;
     this._ui.clear();
-    this._menuState = new _MenuState2.default();
+    this._gameState = new _GameState2.default();
   }
 
   _createClass(MainMenu, [{
-    key: 'RenderQuestion',
-    value: function RenderQuestion(callback) {
+    key: 'renderQuestion',
+    value: function renderQuestion(callback) {
       var _this = this;
 
       this._callback = callback;
       console.log('========================');
       console.log('WELCOME TO CONNECT4 GAME');
       console.log('========================');
-      this.RenderQuestionDifficulty(function () {
-        _this.RenderQuestionPlayerBlue(function () {
-          _this.RenderQuestionPlayerRed(function () {
-            _this._menuState.DoAction(_this._context);
+      this.renderQuestionDifficulty(function () {
+        _this.renderQuestionPlayerBlue(function () {
+          _this.renderQuestionPlayerRed(function () {
+            /**
+             * Save game state to context
+             */
+            _this._gameState.doAction(_this._context);
             /**
              * Start game
              */
             var inGamePageState = new _InGamePageState2.default();
-            inGamePageState.DoAction(_this._context);
+            inGamePageState.doAction(_this._context);
             _this._callback();
           });
         });
       });
     }
   }, {
-    key: 'RenderQuestionDifficulty',
-    value: function RenderQuestionDifficulty(callback) {
+    key: 'renderQuestionDifficulty',
+    value: function renderQuestionDifficulty(callback) {
       var _this2 = this;
 
       var difficultyArr = Object.keys(_GameConstant.DIFFICULTY);
@@ -63,16 +66,16 @@ var MainMenu = function () {
         return diff;
       }) + ') default "EASY" : ', function (answer) {
         if (difficultyArr.indexOf(answer.toUpperCase()) > -1) {
-          _this2._menuState.SetDifficulty(answer);
+          _this2._gameState.setDifficulty(answer);
         } else {
-          _this2._menuState.SetDifficulty(_GameConstant.DIFFICULTY.EASY);
+          _this2._gameState.setDifficulty(_GameConstant.DIFFICULTY.EASY);
         }
         callback();
       });
     }
   }, {
-    key: 'RenderQuestionPlayerBlue',
-    value: function RenderQuestionPlayerBlue(callback) {
+    key: 'renderQuestionPlayerBlue',
+    value: function renderQuestionPlayerBlue(callback) {
       var _this3 = this;
 
       var playerTypeArr = Object.keys(_GameConstant.PLAYER_TYPE);
@@ -80,16 +83,16 @@ var MainMenu = function () {
         return player;
       }) + ') default "HUMAN" : ', function (answer) {
         if (playerTypeArr.indexOf(answer.toUpperCase()) > -1) {
-          _this3._menuState.SetPlayerBlue(answer);
+          _this3._gameState.setPlayerBlue(answer);
         } else {
-          _this3._menuState.SetPlayerBlue(_GameConstant.PLAYER_TYPE.HUMAN);
+          _this3._gameState.setPlayerBlue(_GameConstant.PLAYER_TYPE.HUMAN);
         }
         callback();
       });
     }
   }, {
-    key: 'RenderQuestionPlayerRed',
-    value: function RenderQuestionPlayerRed(callback) {
+    key: 'renderQuestionPlayerRed',
+    value: function renderQuestionPlayerRed(callback) {
       var _this4 = this;
 
       var playerTypeArr = Object.keys(_GameConstant.PLAYER_TYPE);
@@ -97,9 +100,9 @@ var MainMenu = function () {
         return player;
       }) + ') default "COMPUTER" : ', function (answer) {
         if (playerTypeArr.indexOf(answer.toUpperCase()) > -1) {
-          _this4._menuState.SetPlayerRed(answer);
+          _this4._gameState.setPlayerRed(answer);
         } else {
-          _this4._menuState.SetPlayerRed(_GameConstant.PLAYER_TYPE.COMPUTER);
+          _this4._gameState.setPlayerRed(_GameConstant.PLAYER_TYPE.COMPUTER);
         }
         callback();
       });

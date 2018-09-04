@@ -8,17 +8,27 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var State = function () {
-  function State() {
-    _classCallCheck(this, State);
+var Move = function () {
+  function Move(column, score) {
+    _classCallCheck(this, Move);
+
+    this._column = column;
+    this._score = score;
   }
 
-  _createClass(State, [{
-    key: "doAction",
-    value: function doAction(context) {}
+  _createClass(Move, [{
+    key: "getColumn",
+    value: function getColumn() {
+      return this._column;
+    }
+  }, {
+    key: "getScore",
+    value: function getScore() {
+      return this._score;
+    }
   }]);
 
-  return State;
+  return Move;
 }();
 
-exports.default = State;
+exports.default = Move;

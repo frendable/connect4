@@ -6,9 +6,9 @@ class MainMenuPageState extends PageState {
     super(PAGE.MAIN_MENU);
   }
 
-  DoAction(context) {
+  doAction(context) {
     console.log(`Main Menu!`);
-    context.SetPageState(this);
+    context.setPageState(this);
   }
 }
 

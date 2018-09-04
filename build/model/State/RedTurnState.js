@@ -30,10 +30,12 @@ var RedTurnState = function (_TurnState) {
   }
 
   _createClass(RedTurnState, [{
-    key: 'DoAction',
-    value: function DoAction(context) {
-      console.log('Red Player Make A move!');
-      context.SetTurnState(this);
+    key: 'doAction',
+    value: function doAction(context) {
+      /**
+       * Red player make a move
+       */
+      context.setTurnState(this);
     }
   }]);
 

@@ -1,5 +1,5 @@
 import { DIFFICULTY, PLAYER_TYPE } from '../resource/GameConstant';
-import MenuState from '../model/State/MenuState';
+import GameState from '../model/State/GameState';
 import InGamePageState from '../model/State/InGamePageState';
 
 class MainMenu {
@@ -7,60 +7,63 @@ class MainMenu {
     this._context = context;
     this._ui = ui;
     this._ui.clear();
-    this._menuState = new MenuState();
+    this._gameState = new GameState();
   }
 
-  RenderQuestion(callback) {
+  renderQuestion(callback) {
     this._callback = callback;
     console.log('========================');
     console.log('WELCOME TO CONNECT4 GAME');
     console.log('========================');
-    this.RenderQuestionDifficulty(() => {
-      this.RenderQuestionPlayerBlue(() => {
-        this.RenderQuestionPlayerRed(() => {
-          this._menuState.DoAction(this._context);
+    this.renderQuestionDifficulty(() => {
+      this.renderQuestionPlayerBlue(() => {
+        this.renderQuestionPlayerRed(() => {
+          /**
+           * Save game state to context
+           */
+          this._gameState.doAction(this._context);
           /**
            * Start game
            */
           const inGamePageState = new InGamePageState();
-          inGamePageState.DoAction(this._context);
+          inGamePageState.doAction(this._context);
           this._callback();
         })
       })
     });
   }
 
-  RenderQuestionDifficulty(callback) {
+  renderQuestionDifficulty(callback) {
     const difficultyArr = Object.keys(DIFFICULTY);
     this._ui.question(`Difficulty (${difficultyArr.map(diff => diff)}) default "EASY" : `, (answer) => {
       if (difficultyArr.indexOf(answer.toUpperCase()) > -1) {
-        this._menuState.SetDifficulty(answer);
+        this._gameState.setDifficulty(answer);
       } else {
-        this._menuState.SetDifficulty(DIFFICULTY.EASY);
+        this._gameState.setDifficulty(DIFFICULTY.EASY);
       }
       callback();
     });
   }
 
-  RenderQuestionPlayerBlue(callback) {
+  renderQuestionPlayerBlue(callback) {
     const playerTypeArr = Object.keys(PLAYER_TYPE);
     this._ui.question(`Player Blue (${playerTypeArr.map(player => player)}) default "HUMAN" : `, (answer) => {
       if (playerTypeArr.indexOf(answer.toUpperCase()) > -1) {
-        this._menuState.SetPlayerBlue(answer);
+        this._gameState.setPlayerBlue(answer);
       } else {
-        this._menuState.SetPlayerBlue(PLAYER_TYPE.HUMAN);
+        this._gameState.setPlayerBlue(PLAYER_TYPE.HUMAN);
       }
       callback();
     });
   }
 
-  RenderQuestionPlayerRed(callback) {
+  renderQuestionPlayerRed(callback) {
     const playerTypeArr = Object.keys(PLAYER_TYPE);
     this._ui.question(`Player Red (${playerTypeArr.map(player => player)}) default "COMPUTER" : `, (answer) => {
       if (playerTypeArr.indexOf(answer.toUpperCase()) > -1) {
-        this._menuState.SetPlayerRed(answer);
+        this._gameState.setPlayerRed(answer);
       } else {
-        this._menuState.SetPlayerRed(PLAYER_TYPE.COMPUTER);
+        this._gameState.setPlayerRed(PLAYER_TYPE.COMPUTER);
       }
       callback();
     });

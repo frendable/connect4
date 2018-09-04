@@ -39,8 +39,6 @@ var keys = {
 
 var Interface = function () {
   function Interface() {
-    var _this = this;
-
     var output = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : stdout;
     var input = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : stdin;
 
@@ -53,36 +51,47 @@ var Interface = function () {
     this.input.setEncoding('utf8');
 
     this.cursor = (0, _ansi2.default)(this.output).hide();
-
-    this.input.addListener('data', function (data) {
-      var always = listeners.filter(function (listener) {
-        return listener.key === '';
-      });
-
-      always.forEach(function (listener) {
-        return listener.fn();
-      });
-
-      var key = Object.keys(keys).find(function (value, i) {
-        return keys[value] === data;
-      });
-
-      if (key === 'exit') {
-        _this.output.write('\x1B[2J\x1B[0;0H');
-        process.exit();
-      }
-
-      var match = listeners.filter(function (listener) {
-        return listener.key === key || listener.key === data;
-      });
-
-      match.forEach(function (listener) {
-        return listener.fn();
-      });
-    });
+    this.initListener();
   }
 
   _createClass(Interface, [{
+    key: 'initListener',
+    value: function initListener() {
+      var _this = this;
+
+      this.rl = _readline2.default.createInterface({
+        input: this.input,
+        output: this.output
+      });
+
+      this.input.addListener('data', function (data) {
+        var always = listeners.filter(function (listener) {
+          return listener.key === '';
+        });
+
+        always.forEach(function (listener) {
+          return listener.fn();
+        });
+
+        var key = Object.keys(keys).find(function (value, i) {
+          return keys[value] === data;
+        });
+
+        if (key === 'exit') {
+          _this.output.write('\x1B[2J\x1B[0;0H');
+          process.exit();
+        }
+
+        var match = listeners.filter(function (listener) {
+          return listener.key === key || listener.key === data;
+        });
+
+        match.forEach(function (listener) {
+          return listener.fn();
+        });
+      });
+    }
+  }, {
     key: 'clear',
     value: function clear() {
       this.output.write('\x1B[2J\x1B[0;0H');
@@ -97,13 +106,7 @@ var Interface = function () {
   }, {
     key: 'question',
     value: function question(text, callback) {
-      var rl = _readline2.default.createInterface({
-        input: this.input,
-        output: this.output
-      });
-
-      rl.question(text, function (answer) {
-        rl.close();
+      this.rl.question(text, function (answer) {
         callback(answer);
       });
     }
@@ -115,11 +118,6 @@ var Interface = function () {
         key = '';
       }
       listeners.push({ key: key, fn: fn });
-    }
-  }, {
-    key: 'clearListeners',
-    value: function clearListeners() {
-      listeners = [];
     }
   }, {
     key: 'line',
@@ -138,12 +136,12 @@ var Interface = function () {
 
       for (var x = from.x; x < to.x; x++) {
         this.cursor.goto(x, y);
-        this.write('.');
+        this.write('=');
         error += deltaerr;
 
         while (error >= 0.5) {
           this.cursor.goto(x, y);
-          this.write('.');
+          this.write('=');
           y += Math.sign(delta.y);
 
           error -= 1;

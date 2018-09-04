@@ -7,7 +7,7 @@ class PageState extends State {
     console.log(`Open ${page}`);
   }
 
-  GetPage() {
+  getPage() {
     return this._page;
   }
 }

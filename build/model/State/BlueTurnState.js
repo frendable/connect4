@@ -30,10 +30,12 @@ var BlueTurnState = function (_TurnState) {
   }
 
   _createClass(BlueTurnState, [{
-    key: 'DoAction',
-    value: function DoAction(context) {
-      console.log('Blue Player Make A move!');
-      context.SetTurnState(this);
+    key: 'doAction',
+    value: function doAction(context) {
+      /**
+       * Blue player make a move
+       */
+      context.setTurnState(this);
     }
   }]);
 

@@ -6,9 +6,11 @@ class BlueTurnState extends TurnState {
     super(COLOR.BLUE, playerType);
   }
 
-  DoAction(context) {
-    console.log(`Blue Player Make A move!`);
-    context.SetTurnState(this);
+  doAction(context) {
+    /**
+     * Blue player make a move
+     */
+    context.setTurnState(this);
   }
 }
 

@@ -12,6 +12,7 @@ var Player = function () {
   function Player(name) {
     _classCallCheck(this, Player);
 
+    this._name = name;
     console.log(name + ' created!');
   }
 

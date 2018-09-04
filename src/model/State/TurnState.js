@@ -8,11 +8,11 @@ class TurnState extends State {
     console.log(`${this._color} Player Turn ${this._playerType}`);
   }
 
-  GetColor() {
+  getColor() {
     return this._color;
   }
 
-  GetPlayerType() {
+  getPlayerType() {
     return this._playerType;
   }
 }

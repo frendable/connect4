@@ -1,4 +1,5 @@
 import { COLOR, OUTCOME } from '../resource/GameConstant';
+import Disc from './Disc';
 
 class GameBoard {
   constructor(context, ui) {
@@ -7,85 +8,139 @@ class GameBoard {
     this._ROW = 6;
     this._COLUMN = 7;
     this._COUNTERS_IN_MATCH = 4;
-
+    this._playerActiveColumn = 0;
     this._draw = false;
-    this._cellValue = false;
-    this._grid = [];
-    for (let i = 0; i < this._ROW; i++) {
-      for (let j = 0; j < this._COLUMN; j++) {
-        if (this._grid[i] === undefined) {
-          this._grid[i] = [];
-        }
-        this._grid[i][j] = 'o';
-      }
-    }
-    this._p;
-    this._q;
+
+    /**
+     * Variable for determine the winner
+     */
+    this._cellValue = new Disc();
+    /**
+     * Grid game board state
+     */
+    this._grid = new Array(this._ROW).fill(null).map(() => {
+      return new Array(this._COLUMN).fill(new Disc());
+    });
+    /**
+     * Player win starting index
+     */
+    this._i;
+    this._j;
+    /**
+     * Direction win (horizontal, vertical, diagonal)
+     */
     this._WIN_X;
     this._WIN_Y;
-    this._free;
+    /**
+     * Free cell available
+     */
+    this._free = new Array(this._COLUMN).fill(this._ROW);
+
+    this._listeners = [];
   }
 
-  CheckWin() {
+  newGame() {
+    this._grid = new Array(this._ROW).fill(null).map(() => {
+      return new Array(this._COLUMN).fill(new Disc());
+    });
+    this._free = new Array(this._COLUMN).fill(this._ROW);
+  }
+
+  getGrid() {
+    return this._grid;
+  }
+
+  getNumRow() {
+    return this._ROW;
+  }
+
+  getNumColumn() {
+    return this._COLUMN;
+  }
+
+  getPlayerActiveColumn() {
+    return this._playerActiveColumn;
+  }
+
+  setPlayerActiveColumn(playerActiveColumn) {
+    this._playerActiveColumn = playerActiveColumn;
+    this.redraw();
+  }
+
+  checkWin() {
     this._draw = true;
-    this._cellValue = 0;
-    if (HorizontalCheck() || VerticalCheck() || AscendingDiagonalCheck() || DescendingDiagonalCheck()) {
-      return this._cellValue === COLOR.BLUE ? OUTCOME.BLUE_WIN : OUTCOME.RED_WIN;
+    if (this.horizontalCheck() || this.verticalCheck() || this.ascendingDiagonalCheck() || this.descendingDiagonalCheck()) {
+      return this._cellValue.color === COLOR.BLUE ? OUTCOME.BLUE_WIN : OUTCOME.RED_WIN;
     }
     return this._draw ? OUTCOME.DRAW : OUTCOME.NOTHING;
   }
 
-  HorizontalCheck() {
+  horizontalCheck() {
     for (let i = 0; i < this._ROW; i++) {
       for (let j = 0; j < this._COLUMN - 3; j++) {
-          this._cellValue = this._grid[i][j];
-          if (this._cellValue == 0) {
-            this._draw = false;
-          }
-          if (this._cellValue != 0 && this._grid[i][j + 1] == this._cellValue && this._grid[i][j + 2] == this._cellValue && this._grid[i][j + 3] == this._cellValue) {
-            console.log('Horizontal check pass');
-            this._p = i;
-            this._q = j;
-            this._WIN_X = 1;
-            this._WIN_Y = 0;
-            return true;
-          }
+        this._cellValue = this._grid[i][j];
+        if (this._cellValue.color == COLOR.WHITE) {
+          this._draw = false;
+        }
+        if (this._cellValue.color != COLOR.WHITE && 
+          this._grid[i][j + 1].color == this._cellValue.color && 
+          this._grid[i][j + 2].color == this._cellValue.color && 
+          this._grid[i][j + 3].color == this._cellValue.color) {
+          /**
+           * Horizontal check pass
+           */
+          this._i = i;
+          this._j = j;
+          this._WIN_X = 1;
+          this._WIN_Y = 0;
+          return true;
+        }
       }
     }
     return false;
   }
 
-  VerticalCheck() {
+  verticalCheck() {
     for (let j = 0; j < this._COLUMN; j++) {
       for (let i = 0; i < this._ROW - 3; i++) {
-          this._cellValue = this._grid[i][j];
-          if (this._cellValue == 0) {
-            this._draw = false;
-          }
-          if (this._cellValue != 0 && this._grid[i + 1][j] == this._cellValue && this._grid[i + 2][j] == this._cellValue && this._grid[i + 3][j] == this._cellValue) {
-            console.log('Vertical check pass');
-            this._p = i;
-            this._q = j;
-            this._WIN_X = 0;
-            this._WIN_Y = 1;
-            return true;
-          }
+        this._cellValue = this._grid[i][j];
+        if (this._cellValue.color == COLOR.WHITE) {
+          this._draw = false;
+        }
+        if (this._cellValue.color != COLOR.WHITE &&
+          this._grid[i + 1][j].color == this._cellValue.color &&
+          this._grid[i + 2][j].color == this._cellValue.color &&
+          this._grid[i + 3][j].color == this._cellValue.color) {
+          /**
+           * Vertical check pass
+           */
+          this._i = i;
+          this._j = j;
+          this._WIN_X = 0;
+          this._WIN_Y = 1;
+          return true;
+        }
       }
     }
     return false;
   }
 
-  AscendingDiagonalCheck() {
+  ascendingDiagonalCheck() {
     for (let i = 3; i < this._ROW; i++) {
       for (let j = 0; j < this._COLUMN - 3; j++) {
         this._cellValue = this._grid[i][j];
-        if (this._cellValue == 0) {
+        if (this._cellValue.color == COLOR.WHITE) {
           this._draw = false;
         }
-        if (this._cellValue != 0 && this._grid[i - 1][j + 1] == this._cellValue && this._grid[i - 2][j + 2] == this._cellValue && this._grid[i - 3][j + 3] == this._cellValue) {
-          console.log('Ascending Diagonal check pass');
-          this._p = i;
-          this._q = j;
+        if (this._cellValue.color != COLOR.WHITE &&
+          this._grid[i - 1][j + 1].color == this._cellValue.color &&
+          this._grid[i - 2][j + 2].color == this._cellValue.color &&
+          this._grid[i - 3][j + 3].color == this._cellValue.color) {
+          /**
+           * Ascending diagonal check pass
+           */
+          this._i = i;
+          this._j = j;
           this._WIN_X = 1;
           this._WIN_Y = -1;
           return true;
@@ -95,62 +150,74 @@ class GameBoard {
     return false;
   }
 
-  DescendingDiagonalCheck() {
+  descendingDiagonalCheck() {
     for (let i = 3; i < this._ROW; i++) {
       for (let j = 3; j < this._COLUMN; j++) {
-          this._cellValue = this._grid[i][j];
-          if (this._cellValue == 0) {
-            this._draw = false;
-          }
-          if (this._cellValue != 0 && this._grid[i - 1][j - 1] == this._cellValue && this._grid[i - 2][j - 2] == this._cellValue && this._grid[i - 3][j - 3] == this._cellValue) {
-            console.log('Descending Diagonal check pass');
-            this._p = i;
-            this._q = j;
-            this._WIN_X = -1;
-            this._WIN_Y = -1;
-            return true;
-          }
+        this._cellValue = this._grid[i][j];
+        if (this._cellValue.color == COLOR.WHITE) {
+          this._draw = false;
+        }
+        if (this._cellValue.color != COLOR.WHITE &&
+          this._grid[i - 1][j - 1].color == this._cellValue.color &&
+          this._grid[i - 2][j - 2].color == this._cellValue.color &&
+          this._grid[i - 3][j - 3].color == this._cellValue.color) {
+          /**
+           * Descending diagonal check pass
+           */
+          this._i = i;
+          this._j = j;
+          this._WIN_X = -1;
+          this._WIN_Y = -1;
+          return true;
+        }
       }
     }
     return false;
   }
 
-  GetWinDiscs(cells) {
+  getWinDiscs() {
     const combination = [];
     for (let i = 0; i < 4; i++) {
-      combination.push(cells[this._p + this._WIN_Y * i][this._q + this._WIN_X * i]);
+      combination.push({x: this._j + this._WIN_X * i, y: this._i + this._WIN_Y * i});
     }
     return combination;
   }
 
-  PlaceMove(column, player) {
+  placeMove(column, player) {
     if (this._free[column] > 0) {
       this._grid[this._free[column] - 1][column] = player;
       this._free[column]--;
     }
   }
 
-  ColumnHeight(index) {
+  undoMove(column) {
+    if (this._free[column] < this._ROW) {
+      this._free[column]++;
+      this._grid[this._free[column] - 1][column] = new Disc();
+    }
+  }
+
+  columnHeight(index) {
     return this._free[index];
   }
 
-  CheckMatch(column, row) {
+  checkMatch(column, row) {
     let horizontal_matches = 0;
     let vertical_matches = 0;
     let forward_diagonal_matches = 0;
     let backward_diagonal_matches = 0;
-
+    
     // horizontal matches
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column + i, row)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column + i, row)) {
         horizontal_matches++;
       } else {
         break;
       }
     }
 
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column - i, row)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column - i, row)) {
         horizontal_matches++;
       } else {
         break;
@@ -158,16 +225,16 @@ class GameBoard {
     }
 
     // vertical matches
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column, row + i)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column, row + i)) {
         vertical_matches++;
       } else {
         break;
       }
     }
 
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column, row - i)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column, row - i)) {
         vertical_matches++;
       } else {
         break;
@@ -175,16 +242,16 @@ class GameBoard {
     }
 
     // backward diagonal matches ( \ )
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column + i, row - i)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column + i, row - i)) {
         backward_diagonal_matches++;
       } else {
         break;
       }
     }
 
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column - i, row + i)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column - i, row + i)) {
         backward_diagonal_matches++;
       } else {
         break;
@@ -192,26 +259,26 @@ class GameBoard {
     }
 
     // forward diagonal matches ( / )
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column + i, row + i)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column + i, row + i)) {
         forward_diagonal_matches++;
       } else {
         break;
       }
     }
 
-    for (let i = 1; i < COUNTERS_IN_MATCH; i++) {
-      if (matchingCounters(column, row, column - i, row - i)) {
+    for (let i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+      if (this.matchingCounters(column, row, column - i, row - i)) {
         forward_diagonal_matches++;
       } else {
         break;
       }
     }
 
-    return horizontal_matches >= COUNTERS_IN_MATCH - 1
-            || vertical_matches >= COUNTERS_IN_MATCH - 1
-            || forward_diagonal_matches >= COUNTERS_IN_MATCH - 1
-            || backward_diagonal_matches >= COUNTERS_IN_MATCH - 1;
+    return horizontal_matches >= this._COUNTERS_IN_MATCH - 1
+            || vertical_matches >= this._COUNTERS_IN_MATCH - 1
+            || forward_diagonal_matches >= this._COUNTERS_IN_MATCH - 1
+            || backward_diagonal_matches >= this._COUNTERS_IN_MATCH - 1;
   }
 
   matchingCounters(columnA, rowA, columnB, rowB) {
@@ -221,22 +288,24 @@ class GameBoard {
       || rowB < 0 || rowB >= this._ROW) {
       return false;
     }
-    return !(this._grid[rowA][columnA] == 0 || this._grid[rowB][columnB] == 0) && this._grid[rowA][columnA] == this._grid[rowB][columnB];
+    
+    return !(this._grid[rowA][columnA].color === COLOR.WHITE ||
+      this._grid[rowB][columnB].color === COLOR.WHITE) && 
+      this._grid[rowA][columnA].color === this._grid[rowB][columnB].color;
   }
 
-  DisplayBoard() {
-    this._ui.write('\n');
-    for (let i = 0; i <= 5; ++i) {
-        for (let j = 0; j <= 6; ++j) {
-          this._ui.write(this._grid[i][j] + " ");
-        }
-        this._ui.write('\n');
-    }
-    this._ui.write('\n');
+  /**
+   * ################
+   * LISTENERS
+   * ################
+   */
+
+  addListener(listener) {
+    this._listeners.push(listener);
   }
 
-  Render(data) {
-
+  redraw() {
+    this._listeners.map(listener => listener.redraw());
   }
 }
 

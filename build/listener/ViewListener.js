@@ -8,17 +8,20 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var State = function () {
-  function State() {
-    _classCallCheck(this, State);
+/**
+ * This is interface class
+ */
+var ViewListener = function () {
+  function ViewListener() {
+    _classCallCheck(this, ViewListener);
   }
 
-  _createClass(State, [{
-    key: "doAction",
-    value: function doAction(context) {}
+  _createClass(ViewListener, [{
+    key: "redraw",
+    value: function redraw() {}
   }]);
 
-  return State;
+  return ViewListener;
 }();
 
-exports.default = State;
+exports.default = ViewListener;

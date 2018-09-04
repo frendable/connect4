@@ -30,10 +30,10 @@ var MainMenuPageState = function (_PageState) {
   }
 
   _createClass(MainMenuPageState, [{
-    key: 'DoAction',
-    value: function DoAction(context) {
+    key: 'doAction',
+    value: function doAction(context) {
       console.log('Main Menu!');
-      context.SetPageState(this);
+      context.setPageState(this);
     }
   }]);
 

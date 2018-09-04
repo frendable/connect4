@@ -6,9 +6,11 @@ class RedTurnState extends TurnState {
     super(COLOR.RED, playerType);
   }
 
-  DoAction(context) {
-    console.log(`Red Player Make A move!`);
-    context.SetTurnState(this);
+  doAction(context) {
+    /**
+     * Red player make a move
+     */
+    context.setTurnState(this);
   }
 }
 

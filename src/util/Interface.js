@@ -27,6 +27,14 @@ export default class Interface {
     this.input.setEncoding('utf8');
 
     this.cursor = ansi(this.output).hide();
+    this.initListener();
+  }
+
+  initListener() {
+    this.rl = readline.createInterface({
+      input: this.input,
+      output: this.output
+    });
 
     this.input.addListener('data', data => {
       let always = listeners.filter(listener => {
@@ -69,13 +77,7 @@ export default class Interface {
   }
 
   question(text, callback) {
-    const rl = readline.createInterface({
-      input: this.input,
-      output: this.output
-    });
-
-    rl.question(text, (answer) => {
-      rl.close();
+    this.rl.question(text, (answer) => {
       callback(answer);
     });
   }
@@ -86,10 +88,6 @@ export default class Interface {
       key = '';
     }
     listeners.push({ key, fn });
-  }
-
-  clearListeners() {
-    listeners = [];
   }
 
   get center() {
@@ -113,12 +111,12 @@ export default class Interface {
 
     for (let x = from.x; x < to.x; x++) {
       this.cursor.goto(x, y);
-      this.write('.');
+      this.write('=');
       error += deltaerr;
 
       while (error >= 0.5) {
         this.cursor.goto(x, y);
-        this.write('.');
+        this.write('=');
         y += Math.sign(delta.y);
 
         error -= 1;

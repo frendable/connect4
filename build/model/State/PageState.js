@@ -32,8 +32,8 @@ var PageState = function (_State) {
   }
 
   _createClass(PageState, [{
-    key: 'GetPage',
-    value: function GetPage() {
+    key: 'getPage',
+    value: function getPage() {
       return this._page;
     }
   }]);

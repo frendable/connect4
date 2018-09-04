@@ -8,44 +8,35 @@ class Context {
     this._state = {
       pageState: null,
       turnState: null,
-      menuState: null,
-      winState: false
+      gameState: null
     }
   }
 
-  SetPageState(pageState) {
+  setPageState(pageState) {
     this._state.pageState = pageState;
   }
 
-  GetPageState() {
+  getPageState() {
     return this._state.pageState;
   }
 
-  SetTurnState(turnState) {
+  setTurnState(turnState) {
     this._state.turnState = turnState;
   }
 
-  GetTurnState() {
+  getTurnState() {
     return this._state.turnState;
   }
 
-  SetWinState(winState) {
-    this._state.winState = winState;
+  setGameState(gameState) {
+    this._state.gameState = gameState;
   }
 
-  GetWinState() {
-    return this._state.winState;
+  getGameState() {
+    return this._state.gameState;
   }
 
-  SetMenuState(menuState) {
-    this._state.menuState = menuState;
-  }
-
-  GetMenuState() {
-    return this._state.menuState;
-  }
-
-  GetAllState() {
+  getAllState() {
     return this._state;
   }
 }

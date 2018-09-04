@@ -8,10 +8,18 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _GameConstant = require('../resource/GameConstant');
 
+var _Disc = require('./Disc');
+
+var _Disc2 = _interopRequireDefault(_Disc);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GameBoard = function () {
   function GameBoard(context, ui) {
+    var _this = this;
+
     _classCallCheck(this, GameBoard);
 
     this._context = context;
@@ -19,48 +27,97 @@ var GameBoard = function () {
     this._ROW = 6;
     this._COLUMN = 7;
     this._COUNTERS_IN_MATCH = 4;
-
+    this._playerActiveColumn = 0;
     this._draw = false;
-    this._cellValue = false;
-    this._grid = [];
-    for (var i = 0; i < this._ROW; i++) {
-      for (var j = 0; j < this._COLUMN; j++) {
-        if (this._grid[i] === undefined) {
-          this._grid[i] = [];
-        }
-        this._grid[i][j] = 'o';
-      }
-    }
-    this._p;
-    this._q;
+
+    /**
+     * Variable for determine the winner
+     */
+    this._cellValue = new _Disc2.default();
+    /**
+     * Grid game board state
+     */
+    this._grid = new Array(this._ROW).fill(null).map(function () {
+      return new Array(_this._COLUMN).fill(new _Disc2.default());
+    });
+    /**
+     * Player win starting index
+     */
+    this._i;
+    this._j;
+    /**
+     * Direction win (horizontal, vertical, diagonal)
+     */
     this._WIN_X;
     this._WIN_Y;
-    this._free;
+    /**
+     * Free cell available
+     */
+    this._free = new Array(this._COLUMN).fill(this._ROW);
+
+    this._listeners = [];
   }
 
   _createClass(GameBoard, [{
-    key: 'CheckWin',
-    value: function CheckWin() {
+    key: 'newGame',
+    value: function newGame() {
+      var _this2 = this;
+
+      this._grid = new Array(this._ROW).fill(null).map(function () {
+        return new Array(_this2._COLUMN).fill(new _Disc2.default());
+      });
+      this._free = new Array(this._COLUMN).fill(this._ROW);
+    }
+  }, {
+    key: 'getGrid',
+    value: function getGrid() {
+      return this._grid;
+    }
+  }, {
+    key: 'getNumRow',
+    value: function getNumRow() {
+      return this._ROW;
+    }
+  }, {
+    key: 'getNumColumn',
+    value: function getNumColumn() {
+      return this._COLUMN;
+    }
+  }, {
+    key: 'getPlayerActiveColumn',
+    value: function getPlayerActiveColumn() {
+      return this._playerActiveColumn;
+    }
+  }, {
+    key: 'setPlayerActiveColumn',
+    value: function setPlayerActiveColumn(playerActiveColumn) {
+      this._playerActiveColumn = playerActiveColumn;
+      this.redraw();
+    }
+  }, {
+    key: 'checkWin',
+    value: function checkWin() {
       this._draw = true;
-      this._cellValue = 0;
-      if (HorizontalCheck() || VerticalCheck() || AscendingDiagonalCheck() || DescendingDiagonalCheck()) {
-        return this._cellValue === _GameConstant.COLOR.BLUE ? _GameConstant.OUTCOME.BLUE_WIN : _GameConstant.OUTCOME.RED_WIN;
+      if (this.horizontalCheck() || this.verticalCheck() || this.ascendingDiagonalCheck() || this.descendingDiagonalCheck()) {
+        return this._cellValue.color === _GameConstant.COLOR.BLUE ? _GameConstant.OUTCOME.BLUE_WIN : _GameConstant.OUTCOME.RED_WIN;
       }
       return this._draw ? _GameConstant.OUTCOME.DRAW : _GameConstant.OUTCOME.NOTHING;
     }
   }, {
-    key: 'HorizontalCheck',
-    value: function HorizontalCheck() {
+    key: 'horizontalCheck',
+    value: function horizontalCheck() {
       for (var i = 0; i < this._ROW; i++) {
         for (var j = 0; j < this._COLUMN - 3; j++) {
           this._cellValue = this._grid[i][j];
-          if (this._cellValue == 0) {
+          if (this._cellValue.color == _GameConstant.COLOR.WHITE) {
             this._draw = false;
           }
-          if (this._cellValue != 0 && this._grid[i][j + 1] == this._cellValue && this._grid[i][j + 2] == this._cellValue && this._grid[i][j + 3] == this._cellValue) {
-            console.log('Horizontal check pass');
-            this._p = i;
-            this._q = j;
+          if (this._cellValue.color != _GameConstant.COLOR.WHITE && this._grid[i][j + 1].color == this._cellValue.color && this._grid[i][j + 2].color == this._cellValue.color && this._grid[i][j + 3].color == this._cellValue.color) {
+            /**
+             * Horizontal check pass
+             */
+            this._i = i;
+            this._j = j;
             this._WIN_X = 1;
             this._WIN_Y = 0;
             return true;
@@ -70,18 +127,20 @@ var GameBoard = function () {
       return false;
     }
   }, {
-    key: 'VerticalCheck',
-    value: function VerticalCheck() {
+    key: 'verticalCheck',
+    value: function verticalCheck() {
       for (var j = 0; j < this._COLUMN; j++) {
         for (var i = 0; i < this._ROW - 3; i++) {
           this._cellValue = this._grid[i][j];
-          if (this._cellValue == 0) {
+          if (this._cellValue.color == _GameConstant.COLOR.WHITE) {
             this._draw = false;
           }
-          if (this._cellValue != 0 && this._grid[i + 1][j] == this._cellValue && this._grid[i + 2][j] == this._cellValue && this._grid[i + 3][j] == this._cellValue) {
-            console.log('Vertical check pass');
-            this._p = i;
-            this._q = j;
+          if (this._cellValue.color != _GameConstant.COLOR.WHITE && this._grid[i + 1][j].color == this._cellValue.color && this._grid[i + 2][j].color == this._cellValue.color && this._grid[i + 3][j].color == this._cellValue.color) {
+            /**
+             * Vertical check pass
+             */
+            this._i = i;
+            this._j = j;
             this._WIN_X = 0;
             this._WIN_Y = 1;
             return true;
@@ -91,18 +150,20 @@ var GameBoard = function () {
       return false;
     }
   }, {
-    key: 'AscendingDiagonalCheck',
-    value: function AscendingDiagonalCheck() {
+    key: 'ascendingDiagonalCheck',
+    value: function ascendingDiagonalCheck() {
       for (var i = 3; i < this._ROW; i++) {
         for (var j = 0; j < this._COLUMN - 3; j++) {
           this._cellValue = this._grid[i][j];
-          if (this._cellValue == 0) {
+          if (this._cellValue.color == _GameConstant.COLOR.WHITE) {
             this._draw = false;
           }
-          if (this._cellValue != 0 && this._grid[i - 1][j + 1] == this._cellValue && this._grid[i - 2][j + 2] == this._cellValue && this._grid[i - 3][j + 3] == this._cellValue) {
-            console.log('Ascending Diagonal check pass');
-            this._p = i;
-            this._q = j;
+          if (this._cellValue.color != _GameConstant.COLOR.WHITE && this._grid[i - 1][j + 1].color == this._cellValue.color && this._grid[i - 2][j + 2].color == this._cellValue.color && this._grid[i - 3][j + 3].color == this._cellValue.color) {
+            /**
+             * Ascending diagonal check pass
+             */
+            this._i = i;
+            this._j = j;
             this._WIN_X = 1;
             this._WIN_Y = -1;
             return true;
@@ -112,18 +173,20 @@ var GameBoard = function () {
       return false;
     }
   }, {
-    key: 'DescendingDiagonalCheck',
-    value: function DescendingDiagonalCheck() {
+    key: 'descendingDiagonalCheck',
+    value: function descendingDiagonalCheck() {
       for (var i = 3; i < this._ROW; i++) {
         for (var j = 3; j < this._COLUMN; j++) {
           this._cellValue = this._grid[i][j];
-          if (this._cellValue == 0) {
+          if (this._cellValue.color == _GameConstant.COLOR.WHITE) {
             this._draw = false;
           }
-          if (this._cellValue != 0 && this._grid[i - 1][j - 1] == this._cellValue && this._grid[i - 2][j - 2] == this._cellValue && this._grid[i - 3][j - 3] == this._cellValue) {
-            console.log('Descending Diagonal check pass');
-            this._p = i;
-            this._q = j;
+          if (this._cellValue.color != _GameConstant.COLOR.WHITE && this._grid[i - 1][j - 1].color == this._cellValue.color && this._grid[i - 2][j - 2].color == this._cellValue.color && this._grid[i - 3][j - 3].color == this._cellValue.color) {
+            /**
+             * Descending diagonal check pass
+             */
+            this._i = i;
+            this._j = j;
             this._WIN_X = -1;
             this._WIN_Y = -1;
             return true;
@@ -133,46 +196,54 @@ var GameBoard = function () {
       return false;
     }
   }, {
-    key: 'GetWinDiscs',
-    value: function GetWinDiscs(cells) {
+    key: 'getWinDiscs',
+    value: function getWinDiscs() {
       var combination = [];
       for (var i = 0; i < 4; i++) {
-        combination.push(cells[this._p + this._WIN_Y * i][this._q + this._WIN_X * i]);
+        combination.push({ x: this._j + this._WIN_X * i, y: this._i + this._WIN_Y * i });
       }
       return combination;
     }
   }, {
-    key: 'PlaceMove',
-    value: function PlaceMove(column, player) {
+    key: 'placeMove',
+    value: function placeMove(column, player) {
       if (this._free[column] > 0) {
         this._grid[this._free[column] - 1][column] = player;
         this._free[column]--;
       }
     }
   }, {
-    key: 'ColumnHeight',
-    value: function ColumnHeight(index) {
+    key: 'undoMove',
+    value: function undoMove(column) {
+      if (this._free[column] < this._ROW) {
+        this._free[column]++;
+        this._grid[this._free[column] - 1][column] = new _Disc2.default();
+      }
+    }
+  }, {
+    key: 'columnHeight',
+    value: function columnHeight(index) {
       return this._free[index];
     }
   }, {
-    key: 'CheckMatch',
-    value: function CheckMatch(column, row) {
+    key: 'checkMatch',
+    value: function checkMatch(column, row) {
       var horizontal_matches = 0;
       var vertical_matches = 0;
       var forward_diagonal_matches = 0;
       var backward_diagonal_matches = 0;
 
       // horizontal matches
-      for (var i = 1; i < COUNTERS_IN_MATCH; i++) {
-        if (matchingCounters(column, row, column + i, row)) {
+      for (var i = 1; i < this._COUNTERS_IN_MATCH; i++) {
+        if (this.matchingCounters(column, row, column + i, row)) {
           horizontal_matches++;
         } else {
           break;
         }
       }
 
-      for (var _i = 1; _i < COUNTERS_IN_MATCH; _i++) {
-        if (matchingCounters(column, row, column - _i, row)) {
+      for (var _i = 1; _i < this._COUNTERS_IN_MATCH; _i++) {
+        if (this.matchingCounters(column, row, column - _i, row)) {
           horizontal_matches++;
         } else {
           break;
@@ -180,16 +251,16 @@ var GameBoard = function () {
       }
 
       // vertical matches
-      for (var _i2 = 1; _i2 < COUNTERS_IN_MATCH; _i2++) {
-        if (matchingCounters(column, row, column, row + _i2)) {
+      for (var _i2 = 1; _i2 < this._COUNTERS_IN_MATCH; _i2++) {
+        if (this.matchingCounters(column, row, column, row + _i2)) {
           vertical_matches++;
         } else {
           break;
         }
       }
 
-      for (var _i3 = 1; _i3 < COUNTERS_IN_MATCH; _i3++) {
-        if (matchingCounters(column, row, column, row - _i3)) {
+      for (var _i3 = 1; _i3 < this._COUNTERS_IN_MATCH; _i3++) {
+        if (this.matchingCounters(column, row, column, row - _i3)) {
           vertical_matches++;
         } else {
           break;
@@ -197,16 +268,16 @@ var GameBoard = function () {
       }
 
       // backward diagonal matches ( \ )
-      for (var _i4 = 1; _i4 < COUNTERS_IN_MATCH; _i4++) {
-        if (matchingCounters(column, row, column + _i4, row - _i4)) {
+      for (var _i4 = 1; _i4 < this._COUNTERS_IN_MATCH; _i4++) {
+        if (this.matchingCounters(column, row, column + _i4, row - _i4)) {
           backward_diagonal_matches++;
         } else {
           break;
         }
       }
 
-      for (var _i5 = 1; _i5 < COUNTERS_IN_MATCH; _i5++) {
-        if (matchingCounters(column, row, column - _i5, row + _i5)) {
+      for (var _i5 = 1; _i5 < this._COUNTERS_IN_MATCH; _i5++) {
+        if (this.matchingCounters(column, row, column - _i5, row + _i5)) {
           backward_diagonal_matches++;
         } else {
           break;
@@ -214,23 +285,23 @@ var GameBoard = function () {
       }
 
       // forward diagonal matches ( / )
-      for (var _i6 = 1; _i6 < COUNTERS_IN_MATCH; _i6++) {
-        if (matchingCounters(column, row, column + _i6, row + _i6)) {
+      for (var _i6 = 1; _i6 < this._COUNTERS_IN_MATCH; _i6++) {
+        if (this.matchingCounters(column, row, column + _i6, row + _i6)) {
           forward_diagonal_matches++;
         } else {
           break;
         }
       }
 
-      for (var _i7 = 1; _i7 < COUNTERS_IN_MATCH; _i7++) {
-        if (matchingCounters(column, row, column - _i7, row - _i7)) {
+      for (var _i7 = 1; _i7 < this._COUNTERS_IN_MATCH; _i7++) {
+        if (this.matchingCounters(column, row, column - _i7, row - _i7)) {
           forward_diagonal_matches++;
         } else {
           break;
         }
       }
 
-      return horizontal_matches >= COUNTERS_IN_MATCH - 1 || vertical_matches >= COUNTERS_IN_MATCH - 1 || forward_diagonal_matches >= COUNTERS_IN_MATCH - 1 || backward_diagonal_matches >= COUNTERS_IN_MATCH - 1;
+      return horizontal_matches >= this._COUNTERS_IN_MATCH - 1 || vertical_matches >= this._COUNTERS_IN_MATCH - 1 || forward_diagonal_matches >= this._COUNTERS_IN_MATCH - 1 || backward_diagonal_matches >= this._COUNTERS_IN_MATCH - 1;
     }
   }, {
     key: 'matchingCounters',
@@ -238,23 +309,28 @@ var GameBoard = function () {
       if (columnA < 0 || columnA >= this._COLUMN || rowA < 0 || rowA >= this._ROW || columnB < 0 || columnB >= this._COLUMN || rowB < 0 || rowB >= this._ROW) {
         return false;
       }
-      return !(this._grid[rowA][columnA] == 0 || this._grid[rowB][columnB] == 0) && this._grid[rowA][columnA] == this._grid[rowB][columnB];
+
+      return !(this._grid[rowA][columnA].color === _GameConstant.COLOR.WHITE || this._grid[rowB][columnB].color === _GameConstant.COLOR.WHITE) && this._grid[rowA][columnA].color === this._grid[rowB][columnB].color;
+    }
+
+    /**
+     * ################
+     * LISTENERS
+     * ################
+     */
+
+  }, {
+    key: 'addListener',
+    value: function addListener(listener) {
+      this._listeners.push(listener);
     }
   }, {
-    key: 'DisplayBoard',
-    value: function DisplayBoard() {
-      this._ui.write('\n');
-      for (var i = 0; i <= 5; ++i) {
-        for (var j = 0; j <= 6; ++j) {
-          this._ui.write(this._grid[i][j] + " ");
-        }
-        this._ui.write('\n');
-      }
-      this._ui.write('\n');
+    key: 'redraw',
+    value: function redraw() {
+      this._listeners.map(function (listener) {
+        return listener.redraw();
+      });
     }
-  }, {
-    key: 'Render',
-    value: function Render(data) {}
   }]);
 
   return GameBoard;

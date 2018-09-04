@@ -6,8 +6,6 @@ import { PAGE } from '../resource/GameConstant';
 import MainMenuController from '../controller/MainMenu';
 import InGameController from '../controller/InGame';
 
-let FRAME = 100;
-
 class GamePlay {
   constructor() {
     this._context = new Context();
@@ -20,34 +18,29 @@ class GamePlay {
      * Open main menu page for the first time
      */
     const mainMenuPageState = new MainMenuPageState();
-    mainMenuPageState.DoAction(this._context);
+    mainMenuPageState.doAction(this._context);
   }
 
   activityManager() {
-    if (this._context.GetPageState().GetPage() === PAGE.MAIN_MENU) {
+    if (this._context.getPageState().getPage() === PAGE.MAIN_MENU) {
       this._activeController = this._mainMenuController;
-      this._activeController.Render(() => {
-        this.loop();
+      this._activeController.start(() => {
+        this.activityManager();
       });
     } else {
       if (this._inGameController === null) {
         this._inGameController = new InGameController(this._context, this._ui);
       }
       this._activeController = this._inGameController;
-      this._activeController.Render();
-      this.loop();
+      this._activeController.start(() => {
+        this.activityManager();
+      });
     }
-  }
-
-  loop() {
-    setTimeout(() => {
-      this.activityManager();
-    }, FRAME);
   }
 
   start() {
     console.log('Game started!');
-    this.loop();
+    this.activityManager();
   }
 }
 

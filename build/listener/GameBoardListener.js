@@ -8,17 +8,21 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var State = function () {
-  function State() {
-    _classCallCheck(this, State);
+var GameBoardListener = function () {
+  function GameBoardListener(view) {
+    _classCallCheck(this, GameBoardListener);
+
+    this._view = view;
   }
 
-  _createClass(State, [{
-    key: "doAction",
-    value: function doAction(context) {}
+  _createClass(GameBoardListener, [{
+    key: "redraw",
+    value: function redraw() {
+      this._view.redraw();
+    }
   }]);
 
-  return State;
+  return GameBoardListener;
 }();
 
-exports.default = State;
+exports.default = GameBoardListener;

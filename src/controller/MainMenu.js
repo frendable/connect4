@@ -1,13 +1,15 @@
 import MainMenuView from '../view/MainMenu';
+import Controller from './Controller';
 
-class MainMenu {
+class MainMenu extends Controller {
   constructor(context, ui) {
+    super(context, ui);
     //Init view
     this._mainMenuView = new MainMenuView(context, ui);
   }
 
-  Render(callback) {
-    this._mainMenuView.RenderQuestion(callback);
+  start(callback) {
+    this._mainMenuView.renderQuestion(callback);
   }
  }
 

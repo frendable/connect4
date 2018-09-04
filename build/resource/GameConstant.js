@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var COLOR = exports.COLOR = {
+  WHITE: 'WHITE', //Blank space
   RED: 'RED',
   BLUE: 'BLUE'
 };

@@ -33,13 +33,13 @@ var TurnState = function (_State) {
   }
 
   _createClass(TurnState, [{
-    key: 'GetColor',
-    value: function GetColor() {
+    key: 'getColor',
+    value: function getColor() {
       return this._color;
     }
   }, {
-    key: 'GetPlayerType',
-    value: function GetPlayerType() {
+    key: 'getPlayerType',
+    value: function getPlayerType() {
       return this._playerType;
     }
   }]);

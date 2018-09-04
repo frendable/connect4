@@ -30,10 +30,10 @@ var InGamePageState = function (_PageState) {
   }
 
   _createClass(InGamePageState, [{
-    key: 'DoAction',
-    value: function DoAction(context) {
+    key: 'doAction',
+    value: function doAction(context) {
       console.log('In Game!');
-      context.SetPageState(this);
+      context.setPageState(this);
     }
   }]);
 

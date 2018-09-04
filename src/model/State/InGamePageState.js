@@ -6,9 +6,9 @@ class InGamePageState extends PageState {
     super(PAGE.IN_GAME);
   }
 
-  DoAction(context) {
+  doAction(context) {
     console.log(`In Game!`);
-    context.SetPageState(this);
+    context.setPageState(this);
   }
 }
 
