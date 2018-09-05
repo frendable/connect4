@@ -1,6 +1,7 @@
 # Connect4
 Text Console-based Connect Four classic game
-Connect Four is a two-player connection game in which the players first choose a color and then take turns dropping one colored disc from the top into a seven-column, six-row vertically suspended grid. The pieces fall straight down, occupying the lowest available space within the column. The objective of the game is to be the first to form a horizontal, vertical, or diagonal line of four of one's own discs.  (https://en.wikipedia.org/wiki/Connect_Four)
+
+Connect Four is a two-player connection game in which the players first choose a color and then take turns dropping one colored disc from the top into a seven-column, six-row vertically suspended grid. The pieces fall straight down, occupying the lowest available space within the column. The objective of the game is to be the first to form a horizontal, vertical, or diagonal line of four of one's own discs. (https://en.wikipedia.org/wiki/Connect_Four)
 
 ## Environment
 - Ubuntu -> use terminal
@@ -12,24 +13,24 @@ Make sure you've Node.js 8.0 version and yarn installed in your system
 ## Configuration and dependency
 Windows
 1. Open command prompt / cmd
-2. Make sure you've Node.js 8.0 and above installed. see https://nodejs.org/en/
-3. Download / clone game github link https://github.com/frendable/connect4 (ie: git clone git@github.com:frendable/connect4.git)
+2. Make sure you've Node.js 8.0 and above installed. see `https://nodejs.org/en/`
+3. Download / clone game github link `https://github.com/frendable/connect4` (ie: `git clone git@github.com:frendable/connect4.git`)
 4. Change directory to "connect4" folder you have cloned
-5. You must install all dependency using "yarn". see https://yarnpkg.com/en/docs/install#windows-stable
-6. Install grunt locally using "yarn global add grunt"
+5. You must install all dependency using `yarn`. see `https://yarnpkg.com/en/docs/install#windows-stable`
+6. Install grunt locally using `yarn global add grunt`
 
 Ubuntu / MacOS
 1. Open command prompt / cmd
-2. Make sure you've Node.js 8.0 and above installed. see https://nodejs.org/en/
-3. Download / clone game github link https://github.com/frendable/connect4 (ie: "git clone git@github.com:frendable/connect4.git")
-4. Change directory to "connect4" folder you have cloned (ie: "cd /connect4")
-5. You must install all dependency using "yarn". see https://yarnpkg.com/en/docs/install
-6. Install grunt locally using "yarn global add grunt"
+2. Make sure you've Node.js 8.0 and above installed. see `https://nodejs.org/en/`
+3. Download / clone game github link `https://github.com/frendable/connect4` (ie: `git clone git@github.com:frendable/connect4.git`)
+4. Change directory to "connect4" folder you have cloned (ie: `cd /connect4`)
+5. You must install all dependency using `yarn`. see `https://yarnpkg.com/en/docs/install`
+6. Install grunt locally using `yarn global add grunt`
 
 ## How to start
 1. Open cmd / terminal
-2. Type "yarn compile" to build the game
-3. Type "yarn start" to start the game
+2. Type `yarn compile` to build the game
+3. Type `yarn start` to start the game
 
 ## Gameplay
 Main Menu Page
@@ -41,8 +42,8 @@ In Game Page
 <img src="https://user-images.githubusercontent.com/13958277/45070968-6021eb80-b117-11e8-955a-740e05100245.gif" width="400px" />
 
 ## Test instruction
-Using jest testing framework (https://jestjs.io/)
-Type "yarn test" in your terminal/cmd
+Using jest testing framework (`https://jestjs.io/`)
+Type `yarn test` in your terminal/cmd
 
 ## Architecture
 Using MVC architecture and SOLID principle (First Five Principle Of Object Oriented) by Uncle Bob
