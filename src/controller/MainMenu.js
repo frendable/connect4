@@ -1,6 +1,8 @@
 import MainMenuView from '../view/MainMenu';
 import Controller from './Controller';
-
+/**
+ * Main menu page
+ */
 class MainMenu extends Controller {
   constructor(context, ui) {
     super(context, ui);

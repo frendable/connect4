@@ -9,36 +9,57 @@ import RedTurnState from '../model/State/RedTurnState';
 import { COLOR, OUTCOME, DIFFICULTY, PLAYER_TYPE } from '../resource/GameConstant';
 import GameBoardListener from '../listener/GameBoardListener';
 
+/**
+ * In game page
+ */
 class InGame extends Controller {
   constructor(context, ui) {
     super(context, ui);
     
-    //Init game board
+    /**
+     * Initialize all component needed
+     */
     this._gameBoard = new GameBoard(context, ui);
     this._blueTurnState = new BlueTurnState(context.getGameState().getPlayerBlue());
     this._redTurnState = new RedTurnState(context.getGameState().getPlayerRed());
     this._blueTurnState.doAction(context);
     this._useAI = context.getGameState().getPlayerBlue() === PLAYER_TYPE.COMPUTER || context.getGameState().getPlayerRed() === PLAYER_TYPE.COMPUTER;
 
-    //Init view
+    /**
+     * Init view
+     */
     this._inGameView = new InGameView(context, ui, this._gameBoard);
 
-    //Init listener
+    /**
+     * Init listener
+     */
     this.initListener(this._inGameView);
     
     if (this._useAI) {
-      //Init ai
+      /**
+       * Init AI
+       */
       this.initAI();
     }
   }
 
+  getGameBoard() {
+    return this._gameBoard;
+  }
+
   handleKeyLeft() {
+    /**
+     * Prevent overflow to left
+     */
     if (this._gameBoard.getPlayerActiveColumn() > 0) {
       this._gameBoard.setPlayerActiveColumn(this._gameBoard.getPlayerActiveColumn() - 1);
     }
   }
 
   handleKeyRight() {
+    /**
+     * Prevent overflow to right
+     */
     if (this._gameBoard.getPlayerActiveColumn() < this._gameBoard._COLUMN - 1) {
       this._gameBoard.setPlayerActiveColumn(this._gameBoard.getPlayerActiveColumn() + 1);
     }
@@ -62,6 +83,10 @@ class InGame extends Controller {
     this._gameBoard.redraw();
   }
 
+  /**
+   * Function action dropDisc
+   * @param {int} column column number to drop the disc
+   */
   dropDisc(column) {
     this._gameBoard.placeMove(column, new Disc(this.context.getTurnState().getColor()));    
     this._gameBoard.redraw();
@@ -72,10 +97,10 @@ class InGame extends Controller {
 
     if ((this.context.getGameState().getOutcome() === OUTCOME.NOTHING)) {
       if (this.context.getTurnState().getColor() === COLOR.BLUE) {
-        //Switch to red
+        //Switch turn to red
         this._redTurnState.doAction(this.context);
       } else {
-        //Switch to blue
+        //Switch turn to blue
         this._blueTurnState.doAction(this.context);
       }
     }
@@ -90,6 +115,9 @@ class InGame extends Controller {
     }
   }
 
+  /**
+   * @return Promise to handle async
+   */
   aiMove() {
     if (this.context.getTurnState().getPlayerType() === PLAYER_TYPE.COMPUTER && this.context.getGameState().getOutcome() === OUTCOME.NOTHING) {
       const turnColor = this.context.getTurnState().getColor();
@@ -118,7 +146,7 @@ class InGame extends Controller {
     this.aiMove();
   }
 
-  initListener(inGameView) {
+  initListener() {
     this.ui.onKey('right', () => {
       this.handleKeyRight();
     });
@@ -135,7 +163,7 @@ class InGame extends Controller {
     this._gameBoard.addListener(new GameBoardListener(this._inGameView));
   }
 
-  start(callback) {
+  start() {
     this._inGameView.renderGame();
   }
 }

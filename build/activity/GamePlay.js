@@ -32,6 +32,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Page management handling
+ */
 var GamePlay = function () {
   function GamePlay() {
     _classCallCheck(this, GamePlay);
@@ -48,6 +51,11 @@ var GamePlay = function () {
     var mainMenuPageState = new _MainMenuPageState2.default();
     mainMenuPageState.doAction(this._context);
   }
+
+  /**
+   * Handle page switching
+   */
+
 
   _createClass(GamePlay, [{
     key: 'activityManager',
@@ -72,7 +80,6 @@ var GamePlay = function () {
   }, {
     key: 'start',
     value: function start() {
-      console.log('Game started!');
       this.activityManager();
     }
   }]);

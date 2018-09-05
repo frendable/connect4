@@ -3,6 +3,9 @@ import Move from './Move';
 import { COLOR } from '../../resource/GameConstant';
 import Disc from '../Disc';
 
+/**
+ * Computer player (AI)
+ */
 class Computer extends Player {
   constructor(gameBoard) {
     super('Computer');

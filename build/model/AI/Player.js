@@ -6,11 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * TODO: Property name for future development
+ */
 var Player = function Player(name) {
   _classCallCheck(this, Player);
 
   this._name = name;
-  console.log(name + " created!");
 };
 
 exports.default = Player;

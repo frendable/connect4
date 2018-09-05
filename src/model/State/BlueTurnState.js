@@ -1,6 +1,9 @@
 import { COLOR } from '../../resource/GameConstant';
 import TurnState from './TurnState';
 
+/**
+ * Blue player turn state
+ */
 class BlueTurnState extends TurnState {
   constructor(playerType) {
     super(COLOR.BLUE, playerType);

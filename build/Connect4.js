@@ -1,5 +1,9 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _GamePlay = require('./activity/GamePlay');
 
 var _GamePlay2 = _interopRequireDefault(_GamePlay);
@@ -15,8 +19,10 @@ var Connect4 = function Connect4() {
   _classCallCheck(this, Connect4);
 
   var gamePlay = new _GamePlay2.default();
-  console.log('Game play created!');
   gamePlay.start();
 };
+
+exports.default = Connect4;
+
 
 new Connect4();

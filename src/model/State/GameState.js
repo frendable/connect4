@@ -1,6 +1,9 @@
 import State from "./State";
 import { DIFFICULTY, PLAYER_TYPE, OUTCOME } from '../../resource/GameConstant';
 
+/**
+ * Define all properties related to gamestate
+ */
 class GameState extends State {
   constructor() {
     super();

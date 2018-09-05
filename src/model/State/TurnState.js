@@ -1,11 +1,13 @@
 import State from './State';
 
+/**
+ * Parent state for blue/red turn state
+ */
 class TurnState extends State {
   constructor(color, playerType) {
     super();
     this._color = color;
     this._playerType = playerType;
-    console.log(`${this._color} Player Turn ${this._playerType}`);
   }
 
   getColor() {

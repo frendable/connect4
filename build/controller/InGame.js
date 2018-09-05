@@ -48,37 +48,56 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/**
+ * In game page
+ */
 var InGame = function (_Controller) {
   _inherits(InGame, _Controller);
 
   function InGame(context, ui) {
     _classCallCheck(this, InGame);
 
-    //Init game board
+    /**
+     * Initialize all component needed
+     */
     var _this = _possibleConstructorReturn(this, (InGame.__proto__ || Object.getPrototypeOf(InGame)).call(this, context, ui));
 
     _this._gameBoard = new _GameBoard2.default(context, ui);
     _this._blueTurnState = new _BlueTurnState2.default(context.getGameState().getPlayerBlue());
     _this._redTurnState = new _RedTurnState2.default(context.getGameState().getPlayerRed());
     _this._blueTurnState.doAction(context);
-    _this._isUseAI = context.getGameState().getPlayerBlue() === _GameConstant.PLAYER_TYPE.COMPUTER || context.getGameState().getPlayerRed() === _GameConstant.PLAYER_TYPE.COMPUTER;
+    _this._useAI = context.getGameState().getPlayerBlue() === _GameConstant.PLAYER_TYPE.COMPUTER || context.getGameState().getPlayerRed() === _GameConstant.PLAYER_TYPE.COMPUTER;
 
-    //Init view
+    /**
+     * Init view
+     */
     _this._inGameView = new _InGame2.default(context, ui, _this._gameBoard);
 
-    //Init listener
+    /**
+     * Init listener
+     */
     _this.initListener(_this._inGameView);
 
-    if (_this._isUseAI) {
-      //Init ai
+    if (_this._useAI) {
+      /**
+       * Init AI
+       */
       _this.initAI();
     }
     return _this;
   }
 
   _createClass(InGame, [{
+    key: 'getGameBoard',
+    value: function getGameBoard() {
+      return this._gameBoard;
+    }
+  }, {
     key: 'handleKeyLeft',
     value: function handleKeyLeft() {
+      /**
+       * Prevent overflow to left
+       */
       if (this._gameBoard.getPlayerActiveColumn() > 0) {
         this._gameBoard.setPlayerActiveColumn(this._gameBoard.getPlayerActiveColumn() - 1);
       }
@@ -86,6 +105,9 @@ var InGame = function (_Controller) {
   }, {
     key: 'handleKeyRight',
     value: function handleKeyRight() {
+      /**
+       * Prevent overflow to right
+       */
       if (this._gameBoard.getPlayerActiveColumn() < this._gameBoard._COLUMN - 1) {
         this._gameBoard.setPlayerActiveColumn(this._gameBoard.getPlayerActiveColumn() + 1);
       }
@@ -102,13 +124,19 @@ var InGame = function (_Controller) {
         this.context.getGameState().setOutcome(_GameConstant.OUTCOME.NOTHING);
         this._gameBoard.newGame();
         this._inGameView.renderGame();
-        if (this._isUseAI) {
+        if (this._useAI) {
           this.aiMove();
         }
       }
 
       this._gameBoard.redraw();
     }
+
+    /**
+     * Function action dropDisc
+     * @param {int} column column number to drop the disc
+     */
+
   }, {
     key: 'dropDisc',
     value: function dropDisc(column) {
@@ -123,15 +151,15 @@ var InGame = function (_Controller) {
 
       if (this.context.getGameState().getOutcome() === _GameConstant.OUTCOME.NOTHING) {
         if (this.context.getTurnState().getColor() === _GameConstant.COLOR.BLUE) {
-          //Switch to red
+          //Switch turn to red
           this._redTurnState.doAction(this.context);
         } else {
-          //Switch to blue
+          //Switch turn to blue
           this._blueTurnState.doAction(this.context);
         }
       }
       this._gameBoard.redraw();
-      if (this._isUseAI) {
+      if (this._useAI) {
         /**
          * Handle Async action aiMove
          */
@@ -140,6 +168,11 @@ var InGame = function (_Controller) {
         });
       }
     }
+
+    /**
+     * @return Promise to handle async
+     */
+
   }, {
     key: 'aiMove',
     value: function aiMove() {
@@ -172,7 +205,7 @@ var InGame = function (_Controller) {
     }
   }, {
     key: 'initListener',
-    value: function initListener(inGameView) {
+    value: function initListener() {
       var _this3 = this;
 
       this.ui.onKey('right', function () {
@@ -192,7 +225,7 @@ var InGame = function (_Controller) {
     }
   }, {
     key: 'start',
-    value: function start(callback) {
+    value: function start() {
       this._inGameView.renderGame();
     }
   }]);

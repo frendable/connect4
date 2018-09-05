@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "grunt",
-    "start": "node ./build/Connect4.js"
+    "start": "node ./build/Connect4.js",
+    "test": "jest --detectOpenHandles"
   },
   "repository": "git@github.com:frendable/connect4.git",
   "author": "Frendy Priandi",
@@ -19,6 +20,7 @@
     "babel-preset-env": "^1.7.0",
     "grunt": "^1.0.3",
     "grunt-babel": "^7.0.0",
-    "grunt-contrib-watch": "^1.1.0"
+    "grunt-contrib-watch": "^1.1.0",
+    "jest": "^23.5.0"
   }
 }

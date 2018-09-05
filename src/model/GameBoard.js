@@ -39,6 +39,9 @@ class GameBoard {
     this._listeners = [];
   }
 
+  /**
+   * New game state
+   */
   newGame() {
     this._grid = new Array(this._ROW).fill(null).map(() => {
       return new Array(this._COLUMN).fill(new Disc());
@@ -46,27 +49,46 @@ class GameBoard {
     this._free = new Array(this._COLUMN).fill(this._ROW);
   }
 
+  /**
+   * Get grid matrix
+   */
   getGrid() {
     return this._grid;
   }
 
+  /**
+   * Get number of gameboard row
+   */
   getNumRow() {
     return this._ROW;
   }
 
+  /**
+   * Get number of gameboard column
+   */
   getNumColumn() {
     return this._COLUMN;
   }
 
+  /**
+   * Get player active column (human only)
+   */
   getPlayerActiveColumn() {
     return this._playerActiveColumn;
   }
 
+  /**
+   * Set player active column (human only)
+   * @param {int} playerActiveColumn 
+   */
   setPlayerActiveColumn(playerActiveColumn) {
     this._playerActiveColumn = playerActiveColumn;
     this.redraw();
   }
 
+  /**
+   * @return OUTCOME return status of the game
+   */
   checkWin() {
     this._draw = true;
     if (this.horizontalCheck() || this.verticalCheck() || this.ascendingDiagonalCheck() || this.descendingDiagonalCheck()) {
@@ -75,6 +97,9 @@ class GameBoard {
     return this._draw ? OUTCOME.DRAW : OUTCOME.NOTHING;
   }
 
+  /**
+   * Horizontal check match
+   */
   horizontalCheck() {
     for (let i = 0; i < this._ROW; i++) {
       for (let j = 0; j < this._COLUMN - 3; j++) {
@@ -100,6 +125,9 @@ class GameBoard {
     return false;
   }
 
+  /**
+   * Vertical check match
+   */
   verticalCheck() {
     for (let j = 0; j < this._COLUMN; j++) {
       for (let i = 0; i < this._ROW - 3; i++) {
@@ -125,6 +153,9 @@ class GameBoard {
     return false;
   }
 
+  /**
+   * Ascending diagonal check match
+   */
   ascendingDiagonalCheck() {
     for (let i = 3; i < this._ROW; i++) {
       for (let j = 0; j < this._COLUMN - 3; j++) {
@@ -150,6 +181,9 @@ class GameBoard {
     return false;
   }
 
+  /**
+   * Descending diagonal check match
+   */
   descendingDiagonalCheck() {
     for (let i = 3; i < this._ROW; i++) {
       for (let j = 3; j < this._COLUMN; j++) {
@@ -175,6 +209,9 @@ class GameBoard {
     return false;
   }
 
+  /**
+   * @return combination Get index combination of win player (used for highlight the winner)
+   */
   getWinDiscs() {
     const combination = [];
     for (let i = 0; i < 4; i++) {
@@ -183,6 +220,11 @@ class GameBoard {
     return combination;
   }
 
+  /**
+   * Put the disc inside the gameboard
+   * @param {int} column 
+   * @param {COLOR} player 
+   */
   placeMove(column, player) {
     if (this._free[column] > 0) {
       this._grid[this._free[column] - 1][column] = player;
@@ -190,6 +232,10 @@ class GameBoard {
     }
   }
 
+  /**
+   * Undo move (used for ai player)
+   * @param {int} column 
+   */
   undoMove(column) {
     if (this._free[column] < this._ROW) {
       this._free[column]++;
@@ -197,10 +243,21 @@ class GameBoard {
     }
   }
 
+  /**
+   * Determine column is still available or not
+   * @param {int} index 
+   * @return columnHeight
+   */
   columnHeight(index) {
     return this._free[index];
   }
 
+  /**
+   * Checkmatch (used for AI to search possible move)
+   * @param {int} column 
+   * @param {int} row
+   * @return boolean
+   */
   checkMatch(column, row) {
     let horizontal_matches = 0;
     let vertical_matches = 0;
@@ -281,6 +338,13 @@ class GameBoard {
             || backward_diagonal_matches >= this._COUNTERS_IN_MATCH - 1;
   }
 
+  /**
+   * Grid cell checking
+   * @param {int} columnA 
+   * @param {int} rowA 
+   * @param {int} columnB 
+   * @param {int} rowB 
+   */
   matchingCounters(columnA, rowA, columnB, rowB) {
     if (columnA < 0 || columnA >= this._COLUMN
       || rowA < 0 || rowA >= this._ROW
@@ -300,10 +364,17 @@ class GameBoard {
    * ################
    */
 
+  /**
+   * Add listener
+   * @param {Listener} listener 
+   */
   addListener(listener) {
     this._listeners.push(listener);
   }
 
+  /**
+   * Render ui view
+   */
   redraw() {
     this._listeners.map(listener => listener.redraw());
   }

@@ -6,9 +6,10 @@ import GamePlay from './activity/GamePlay';
 class Connect4 {
   constructor() {
     const gamePlay = new GamePlay();
-    console.log('Game play created!');
     gamePlay.start();
   }
 }
+
+export default Connect4;
 
 new Connect4();

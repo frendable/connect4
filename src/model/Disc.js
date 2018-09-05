@@ -23,6 +23,10 @@ class Disc {
     return (this._color === COLOR.BLUE || this._color === COLOR.RED) ? this._fullShape : this._emptyShape; 
   }
 
+  /**
+   * @param {COLOR} color
+   * @return hex color used by view (#ff0000)
+   */
   static getHexColorWithParam(color) {
     let hexColor;
     switch(color) {

@@ -8,6 +8,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Used for calculating move score and compare them to get the best move for AI player
+ */
 var Move = function () {
   function Move(column, score) {
     _classCallCheck(this, Move);

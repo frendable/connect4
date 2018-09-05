@@ -58,6 +58,11 @@ var GameBoard = function () {
     this._listeners = [];
   }
 
+  /**
+   * New game state
+   */
+
+
   _createClass(GameBoard, [{
     key: 'newGame',
     value: function newGame() {
@@ -68,32 +73,63 @@ var GameBoard = function () {
       });
       this._free = new Array(this._COLUMN).fill(this._ROW);
     }
+
+    /**
+     * Get grid matrix
+     */
+
   }, {
     key: 'getGrid',
     value: function getGrid() {
       return this._grid;
     }
+
+    /**
+     * Get number of gameboard row
+     */
+
   }, {
     key: 'getNumRow',
     value: function getNumRow() {
       return this._ROW;
     }
+
+    /**
+     * Get number of gameboard column
+     */
+
   }, {
     key: 'getNumColumn',
     value: function getNumColumn() {
       return this._COLUMN;
     }
+
+    /**
+     * Get player active column (human only)
+     */
+
   }, {
     key: 'getPlayerActiveColumn',
     value: function getPlayerActiveColumn() {
       return this._playerActiveColumn;
     }
+
+    /**
+     * Set player active column (human only)
+     * @param {int} playerActiveColumn 
+     */
+
   }, {
     key: 'setPlayerActiveColumn',
     value: function setPlayerActiveColumn(playerActiveColumn) {
       this._playerActiveColumn = playerActiveColumn;
       this.redraw();
     }
+
+    /**
+     * @return OUTCOME return status of the game
+     */
+
   }, {
     key: 'checkWin',
     value: function checkWin() {
@@ -103,6 +139,11 @@ var GameBoard = function () {
       }
       return this._draw ? _GameConstant.OUTCOME.DRAW : _GameConstant.OUTCOME.NOTHING;
     }
+
+    /**
+     * Horizontal check match
+     */
+
   }, {
     key: 'horizontalCheck',
     value: function horizontalCheck() {
@@ -126,6 +167,11 @@ var GameBoard = function () {
       }
       return false;
     }
+
+    /**
+     * Vertical check match
+     */
+
   }, {
     key: 'verticalCheck',
     value: function verticalCheck() {
@@ -149,6 +195,11 @@ var GameBoard = function () {
       }
       return false;
     }
+
+    /**
+     * Ascending diagonal check match
+     */
+
   }, {
     key: 'ascendingDiagonalCheck',
     value: function ascendingDiagonalCheck() {
@@ -172,6 +223,11 @@ var GameBoard = function () {
       }
       return false;
     }
+
+    /**
+     * Descending diagonal check match
+     */
+
   }, {
     key: 'descendingDiagonalCheck',
     value: function descendingDiagonalCheck() {
@@ -195,6 +251,11 @@ var GameBoard = function () {
       }
       return false;
     }
+
+    /**
+     * @return combination Get index combination of win player (used for highlight the winner)
+     */
+
   }, {
     key: 'getWinDiscs',
     value: function getWinDiscs() {
@@ -204,6 +265,13 @@ var GameBoard = function () {
       }
       return combination;
     }
+
+    /**
+     * Put the disc inside the gameboard
+     * @param {int} column 
+     * @param {COLOR} player 
+     */
+
   }, {
     key: 'placeMove',
     value: function placeMove(column, player) {
@@ -212,6 +280,12 @@ var GameBoard = function () {
         this._free[column]--;
       }
     }
+
+    /**
+     * Undo move (used for ai player)
+     * @param {int} column 
+     */
+
   }, {
     key: 'undoMove',
     value: function undoMove(column) {
@@ -220,11 +294,26 @@ var GameBoard = function () {
         this._grid[this._free[column] - 1][column] = new _Disc2.default();
       }
     }
+
+    /**
+     * Determine column is still available or not
+     * @param {int} index 
+     * @return columnHeight
+     */
+
   }, {
     key: 'columnHeight',
     value: function columnHeight(index) {
       return this._free[index];
     }
+
+    /**
+     * Checkmatch (used for AI to search possible move)
+     * @param {int} column 
+     * @param {int} row
+     * @return boolean
+     */
+
   }, {
     key: 'checkMatch',
     value: function checkMatch(column, row) {
@@ -303,6 +392,15 @@ var GameBoard = function () {
 
       return horizontal_matches >= this._COUNTERS_IN_MATCH - 1 || vertical_matches >= this._COUNTERS_IN_MATCH - 1 || forward_diagonal_matches >= this._COUNTERS_IN_MATCH - 1 || backward_diagonal_matches >= this._COUNTERS_IN_MATCH - 1;
     }
+
+    /**
+     * Grid cell checking
+     * @param {int} columnA 
+     * @param {int} rowA 
+     * @param {int} columnB 
+     * @param {int} rowB 
+     */
+
   }, {
     key: 'matchingCounters',
     value: function matchingCounters(columnA, rowA, columnB, rowB) {
@@ -319,11 +417,21 @@ var GameBoard = function () {
      * ################
      */
 
+    /**
+     * Add listener
+     * @param {Listener} listener 
+     */
+
   }, {
     key: 'addListener',
     value: function addListener(listener) {
       this._listeners.push(listener);
     }
+
+    /**
+     * Render ui view
+     */
+
   }, {
     key: 'redraw',
     value: function redraw() {

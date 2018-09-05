@@ -31,6 +31,12 @@ var Disc = function () {
     value: function getShape() {
       return this._color === _GameConstant.COLOR.BLUE || this._color === _GameConstant.COLOR.RED ? this._fullShape : this._emptyShape;
     }
+
+    /**
+     * @param {COLOR} color
+     * @return hex color used by view (#ff0000)
+     */
+
   }, {
     key: 'color',
     set: function set(color) {

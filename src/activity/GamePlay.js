@@ -6,6 +6,9 @@ import { PAGE } from '../resource/GameConstant';
 import MainMenuController from '../controller/MainMenu';
 import InGameController from '../controller/InGame';
 
+/**
+ * Page management handling
+ */
 class GamePlay {
   constructor() {
     this._context = new Context();
@@ -21,6 +24,9 @@ class GamePlay {
     mainMenuPageState.doAction(this._context);
   }
 
+  /**
+   * Handle page switching
+   */
   activityManager() {
     if (this._context.getPageState().getPage() === PAGE.MAIN_MENU) {
       this._activeController = this._mainMenuController;
@@ -39,7 +45,6 @@ class GamePlay {
   }
 
   start() {
-    console.log('Game started!');
     this.activityManager();
   }
 }

@@ -8,6 +8,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Parent controller component
+ */
 var Controller = function () {
   function Controller(context, ui) {
     _classCallCheck(this, Controller);
@@ -15,6 +18,11 @@ var Controller = function () {
     this.context = context;
     this.ui = ui;
   }
+
+  /**
+   * @param {function} switchCallback to switch between page
+   */
+
 
   _createClass(Controller, [{
     key: "start",

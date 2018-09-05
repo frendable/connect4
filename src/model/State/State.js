@@ -1,3 +1,6 @@
+/**
+ * Abstract class state
+ */
 class State {
   constructor() {}
 

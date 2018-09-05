@@ -1,9 +1,7 @@
+/**
+ * Defined all properties which can be accessed by controller, model, and view to know the real current state
+ */ 
 class Context {
-  /**
-   * @private
-   * Context can be accessed by controller, model, and view to know the real current state
-   */
-  
   constructor() {
     this._state = {
       pageState: null,
