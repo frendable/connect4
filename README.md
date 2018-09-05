@@ -57,4 +57,7 @@ https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
 ## Whats next ?
 Using javascript language for Object Oriented Design architecture is really painful when we still use object prototype inheritance. But after ES2015/ES6 is launched, we can use some new beautiful syntax (ie: import, class, export, etc) and it makes development Object Oriented Design easier than before.
 
-This project is using ES2015/ES6, but still has a restriction like the absent feature of the interface, and access modifier like in another programming language (java). So next thing to improve is refactoring all javascript code to typescript
+This project is using ES2015/ES6, but still has a restriction like the absent feature of the interface, and access modifier like in another programming language (java).
+So next thing to improve:
+- refactoring all javascript code to typescript
+- implementation deep learning in game
